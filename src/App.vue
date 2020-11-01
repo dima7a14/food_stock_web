@@ -10,14 +10,36 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, watch } from 'vue';
+import { useRouter } from 'vue-router';
 
+import { useStore } from '@/store';
+import { paths } from '@/router';
 import VHeader from '@/components/Header.vue';
 
 export default defineComponent({
   name: 'App',
   components: {
     VHeader,
+  },
+  setup() {
+    const store = useStore();
+    const router = useRouter();
+
+    function getAllowedRoute(isAuthenticated: boolean) {
+      const route = isAuthenticated ? paths.root.path : paths.signIn.path;
+
+      return route;
+    }
+
+    router.push(getAllowedRoute(store.getters.isAuthenticated));
+
+    watch(
+      () => store.getters.isAuthenticated,
+      (isAuthenticated) => {
+        router.push(getAllowedRoute(isAuthenticated));
+      },
+    );
   },
 });
 

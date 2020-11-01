@@ -89,10 +89,12 @@ export default defineComponent({
         signIn: paths.signIn,
         signUp: paths.signUp,
       },
-      authenticated: true, // TODO: get from store.
     };
   },
   computed: {
+    authenticated() {
+      return this.$store.getters.isAuthenticated;
+    },
     routes() {
       const routes = [paths.root, paths.about];
 

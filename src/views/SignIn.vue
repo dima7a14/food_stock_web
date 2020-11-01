@@ -28,9 +28,11 @@
   </simple-layout>
 </template>
 
-<script type="ts">
-import { defineComponent } from 'vue';
+<script lang="ts">
+import { defineComponent, ref } from 'vue';
 import { paths } from '@/router';
+import { useStore } from '@/store';
+import { ActionTypes } from '@/store/actions';
 import SimpleLayout from '@/layouts/SimpleLayout.vue';
 import VField from '@/components/Field.vue';
 
@@ -40,19 +42,28 @@ export default defineComponent({
     SimpleLayout,
     VField,
   },
-  data() {
+  setup() {
+    const store = useStore();
+    const email = ref('');
+    const password = ref('');
+    const emailError = ref('');
+    const passwordError = ref('');
+
+    function submit() {
+      store.dispatch(ActionTypes.SIGN_IN, {
+        email: email.value,
+        password: password.value,
+      });
+    }
+
     return {
+      email,
+      password,
+      emailError,
+      passwordError,
       signUpPath: paths.signUp,
-      email: '',
-      emailError: '',
-      password: '',
-      passwordError: '',
+      submit,
     };
-  },
-  methods: {
-    submit() {
-      console.log('submit');
-    },
   },
 });
 </script>

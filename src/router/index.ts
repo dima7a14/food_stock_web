@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import Home from '../views/Home.vue';
+import { useStore } from '@/store';
+import Home from '@/views/Home.vue';
 
 export const paths = {
   root: {
@@ -32,6 +33,12 @@ export const paths = {
   },
 };
 
+function isAuthenticated() {
+  const store = useStore();
+
+  return store.getters.isAuthenticated;
+}
+
 const routes: Array<RouteRecordRaw> = [
   {
     ...paths.root,
@@ -47,22 +54,37 @@ const routes: Array<RouteRecordRaw> = [
   {
     ...paths.signIn,
     component: () => import(/* webpackChunkName: "sign_in" */ '../views/SignIn.vue'),
+    beforeEnter() {
+      return !isAuthenticated();
+    },
   },
   {
     ...paths.signUp,
     component: () => import(/* webpackChunkName: "sign_up" */ '../views/SignUp.vue'),
+    beforeEnter() {
+      return !isAuthenticated();
+    },
   },
   {
     ...paths.products,
     component: () => import(/* webpackChunkName: "products" */ '../views/Products.vue'),
+    beforeEnter() {
+      return isAuthenticated();
+    },
   },
   {
     ...paths.operations,
     component: () => import(/* webpackChunkName: "operations" */ '../views/Operations.vue'),
+    beforeEnter() {
+      return isAuthenticated();
+    },
   },
   {
     ...paths.requests,
     component: () => import(/* webpackChunkName: "requests" */ '../views/Requests.vue'),
+    beforeEnter() {
+      return isAuthenticated();
+    },
   },
 ];
 
