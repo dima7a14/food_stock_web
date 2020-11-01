@@ -10,7 +10,7 @@ const app = feathers<{ user: APIUser }>();
 app.configure(socketio(socket));
 
 app.configure(auth({
-  storageKey: 'food_storage_token',
+  storageKey: 'FOOD_STORAGE_TOKEN',
 }));
 
 interface AuthenticationResult {

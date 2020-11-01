@@ -5,14 +5,24 @@ import {
   CommitOptions,
   DispatchOptions,
 } from 'vuex';
+import VuexPersistence from 'vuex-persist';
 import { State, state } from './state';
 import { Getters, getters } from './getters';
 import { Mutations, mutations } from './mutations';
 import { Actions, actions } from './actions';
 
+const vuexLocal = new VuexPersistence<State>({
+  key: 'FOOD_STORAGE_DATA',
+  storage: window.localStorage,
+  reducer: ({ user }) => ({
+    user,
+  }),
+});
+
 export const store = createStore({
   plugins: [
     createLogger(),
+    vuexLocal.plugin,
   ],
   state,
   getters,

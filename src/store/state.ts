@@ -1,6 +1,5 @@
 import { User, Product, Operation } from './common';
 
-
 export interface State {
   user: User;
   products: Product[];
