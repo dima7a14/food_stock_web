@@ -1,9 +1,16 @@
-import { User, Product, Operation } from './common';
+import {
+  User,
+  Product,
+  Operation,
+  Message,
+} from './common';
 
 export interface State {
   user: User;
   products: Product[];
   operations: Operation[];
+  loading: boolean;
+  message: Message;
 }
 
 export const state: State = {
@@ -13,4 +20,8 @@ export const state: State = {
   },
   products: [],
   operations: [],
+  loading: false,
+  message: {
+    content: '',
+  },
 };

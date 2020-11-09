@@ -1,12 +1,16 @@
 <template>
-  <v-header></v-header>
-  <section class="section container is-widescreen main-content">
-    <router-view v-slot="{ Component }">
-      <transition name="fade">
-        <component :is="Component" />
-      </transition>
-    </router-view>
-  </section>
+  <main class="app">
+    <v-header></v-header>
+    <section class="section container is-widescreen main-content">
+      <router-view v-slot="{ Component }">
+        <transition name="fade">
+          <component :is="Component" />
+        </transition>
+      </router-view>
+    </section>
+    <v-message></v-message>
+    <v-progress></v-progress>
+  </main>
 </template>
 
 <script lang="ts">
@@ -16,11 +20,15 @@ import { useRouter } from 'vue-router';
 import { useStore } from '@/store';
 import { paths } from '@/router';
 import VHeader from '@/components/Header.vue';
+import VMessage from '@/components/Message.vue';
+import VProgress from '@/components/Progress.vue';
 
 export default defineComponent({
   name: 'App',
   components: {
     VHeader,
+    VMessage,
+    VProgress,
   },
   setup() {
     const store = useStore();
@@ -47,10 +55,13 @@ export default defineComponent({
 
 <style lang="scss">
 @import "@/theme/main";
-#app {
+@import "@/theme/values";
+
+.app {
+  position: relative;
   width: 100vw;
   height: 100vh;
-  overflow: auto;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -59,5 +70,6 @@ export default defineComponent({
 
 .main-content {
   flex-grow: 2;
+  margin-top: $header-height;
 }
 </style>

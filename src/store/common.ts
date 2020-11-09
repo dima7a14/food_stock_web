@@ -20,3 +20,8 @@ export interface Operation {
   createdAt?: string;
   updatedAt?: string;
 }
+
+export interface Message {
+  content: string;
+  status?: 'success' | 'error' | 'info';
+}

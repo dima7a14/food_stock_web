@@ -1,5 +1,5 @@
 <template>
-  <header>
+  <header class="header">
     <nav class="navbar is-light" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
         <router-link class="navbar-item" :to="routes[0].path">
@@ -28,17 +28,32 @@
           </router-link>
         </div>
         <div class="navbar-end">
-          <div class="navbar-item auth-btns--desktop" v-if="!authenticated">
+          <div class="navbar-item auth-btns--desktop">
             <div class="buttons">
-              <router-link class="button is-primary" :to="authRoutes.signIn.path">
+              <router-link
+                class="button is-primary"
+                v-if="!authenticated"
+                :to="authRoutes.signIn.path"
+              >
                 <strong>{{authRoutes.signIn.name}}</strong>
               </router-link>
-              <router-link class="button is-light" :to="authRoutes.signUp.path">
+              <router-link
+                class="button is-light"
+                v-if="!authenticated"
+                :to="authRoutes.signUp.path"
+              >
                 <strong>{{authRoutes.signUp.name}}</strong>
               </router-link>
+              <button
+                v-if="authenticated"
+                @click="signOut"
+                class="button is-light"
+              >
+                Sign out
+              </button>
             </div>
           </div>
-          <hr class="auth-divider" v-if="!authenticated" />
+          <hr class="auth-divider" />
           <router-link
             class="navbar-item auth-btns--mobile"
             :to="authRoutes.signIn.path"
@@ -53,6 +68,13 @@
           >
             {{authRoutes.signUp.name}}
           </router-link>
+          <a
+            v-if="authenticated"
+            @click="signOut"
+            class="navbar-item auth-btns--mobile"
+          >
+            Sign out
+          </a>
         </div>
       </div>
     </nav>
@@ -63,6 +85,8 @@
 import { defineComponent, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { paths } from '@/router';
+import { useStore } from '@/store';
+import { ActionTypes } from '@/store/actions';
 import { useToggle } from '@/utils';
 
 export default defineComponent({
@@ -78,9 +102,12 @@ export default defineComponent({
       },
     );
 
+    const store = useStore();
+
     return {
       navExpanded,
       toggleNav,
+      signOut: () => store.dispatch(ActionTypes.SIGN_OUT),
     };
   },
   data() {
@@ -117,6 +144,15 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 @import "@/theme/main";
+@import "@/theme/values";
+
+.header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: $header-height;
+}
 
 .current-route {
   align-self: center;

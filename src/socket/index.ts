@@ -30,3 +30,7 @@ export async function authenticate(email: string, password: string) {
 
   return result;
 }
+
+export async function logout() {
+  await app.logout();
+}
