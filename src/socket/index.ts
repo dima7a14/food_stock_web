@@ -1,36 +1,55 @@
-import feathers from '@feathersjs/feathers';
+import feathers, { Application } from '@feathersjs/feathers';
 import socketio from '@feathersjs/socketio-client';
 import io from 'socket.io-client';
 import auth from '@feathersjs/authentication-client';
-import { APIUser } from './types';
+import { APIService, APIUser } from './types';
 
-const socket = io('localhost:3030');
-const app = feathers<{ user: APIUser }>();
+export class API implements APIService {
+  private static _instance: API;
+  private static STORAGE_KEY = 'FOOD_STORAGE_TOKEN';
+  private socket: ReturnType<typeof io>;
+  private app: Application;
 
-app.configure(socketio(socket));
+  constructor(url: string) {
+    this.socket = io(url);
+    this.app = feathers();
 
-app.configure(auth({
-  storageKey: 'FOOD_STORAGE_TOKEN',
-}));
+    this.app.configure(socketio(this.socket))
+    this.app.configure(auth({
+      storageKey: API.STORAGE_KEY,
+    }));
 
-interface AuthenticationResult {
-  accessToken: string;
-  authentication: {
-    strategy: 'local';
-  };
-  user: APIUser;
+    return this;
+  }
+
+  static getInstance(url: string) {
+    if (!API._instance) {
+      API._instance = new API(url);
+    }
+
+    return API._instance;
+  }
+  
+
+  async authenticate(email: string, password: string) {
+    const result = await this.app.authenticate({
+      strategy: 'local',
+      email,
+      password,
+    });
+  
+    return result;
+  }
+
+  async register(email: string, password: string) {
+    const result = await this.app.service('users').create({ email, password });
+
+    return result as APIUser;
+  }
+
+  async logout() {
+    await this.app.logout();
+  }
 }
 
-export async function authenticate(email: string, password: string) {
-  const result = await app.authenticate({
-    strategy: 'local',
-    email,
-    password,
-  }) as AuthenticationResult;
-
-  return result;
-}
-
-export async function logout() {
-  await app.logout();
-}
+export const api = API.getInstance('localhost:3030');

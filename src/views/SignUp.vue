@@ -1,20 +1,13 @@
 <template>
-  <simple-layout>
+  <simple-layout title="Sign up">
     <form @submit.prevent="submit">
-      <h2 class="title">Sign Up</h2>
-      <v-field
-        label="Username"
-        placeholder="Your username"
-        inputType="text"
-        v-model="userName"
-        :error="userNameError"
-      ></v-field>
       <v-field
         label="E-mail"
-        placeholder="Your e-mail"
         inputType="email"
+        placeholder="Your e-mail"
         v-model="email"
         :error="emailError"
+        icon="fa-envelope"
       ></v-field>
       <v-field
         label="Password"
@@ -22,6 +15,7 @@
         inputType="password"
         v-model="password"
         :error="passwordError"
+        icon="fa-key"
       ></v-field>
       <div class="field">
         <div class="control buttons form-btns">
@@ -34,8 +28,10 @@
 </template>
 
 <script type="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import { paths } from '@/router';
+import { useStore } from '@/store';
+import { ActionTypes } from '@/store/actions';
 import SimpleLayout from '@/layouts/SimpleLayout.vue';
 import VField from '@/components/Field.vue';
 
@@ -45,21 +41,28 @@ export default defineComponent({
     SimpleLayout,
     VField,
   },
-  data() {
+  setup() {
+    const store = useStore();
+    const email = ref('');
+    const password = ref('');
+    const emailError = ref('');
+    const passwordError = ref('');
+
+    function submit() {
+      store.dispatch(ActionTypes.SIGN_UP, {
+        email: email.value,
+        password: password.value,
+      });
+    }
+
     return {
+      email,
+      password,
+      emailError,
+      passwordError,
       signInPath: paths.signIn,
-      userName: '',
-      userNameError: '',
-      email: '',
-      emailError: '',
-      password: '',
-      passwordError: '',
+      submit,
     };
-  },
-  methods: {
-    submit() {
-      console.log('submit');
-    },
   },
 });
 </script>

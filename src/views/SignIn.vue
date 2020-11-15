@@ -1,7 +1,6 @@
 <template>
-  <simple-layout>
+  <simple-layout title="Sign in" titleClass="has-background-link">
     <form @submit.prevent="submit">
-      <h2 class="title">Sign in</h2>
       <v-field
         label="E-mail"
         inputType="email"
