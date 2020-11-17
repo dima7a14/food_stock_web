@@ -10,15 +10,17 @@
           </span>
         </div>
       </div>
-      <product
-        v-for="product in products"
-        :key="product._id"
-        :_id="product._id"
-        :title="product.title"
-        :description="product.description"
-        :amount="product.amount"
-        :unit="product.unit"
-      ></product>
+      <div class="products-list">
+        <product
+          v-for="product in products"
+          :key="product._id"
+          :_id="product._id"
+          :title="product.title"
+          :description="product.description"
+          :amount="product.amount"
+          :unit="product.unit"
+        ></product>
+      </div>
       <div class="panel-block">
         <add-new-product>
           <template v-slot:button="slotProps">
@@ -50,7 +52,7 @@ export default defineComponent({
     return {
       products: [{
         _id: 'eeef113f-056a-403c-993a-a43a8375e278',
-        title: 'Juice - Orangina',
+        title: 'Juice - Orangina Juice - Orangina Juice - Orangina Juice - Orangina Juice - Orangina',
         description: 'Maecenas rhoncus aliquam lacus. Morbi quis tortor id nulla ultrices aliquet. Maecenas leo odio, condimentum id, luctus nec, molestie sed, justo. Pellentesque viverra pede ac diam. Cras pellentesque volutpat dui. Maecenas tristique, est et tempus semper, est quam pharetra magna, ac consequat metus sapien ut nunc.',
         amount: 70,
         unit: 'ame',
@@ -119,5 +121,10 @@ export default defineComponent({
 
 .products-body {
   background-color: $white;
+}
+
+.products-list {
+  overflow: scroll;
+  max-height: 50vh;
 }
 </style>

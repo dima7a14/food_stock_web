@@ -1,7 +1,10 @@
 <template>
   <div class="field">
     <label v-if="label" class="label">{{label}}</label>
-    <div class="control has-icons-left has-icons-right">
+    <div
+      class="control"
+      :class="{ 'has-icons-left': icon, 'has-icons-right': !!error }"
+    >
       <input
         :type="inputType"
         class="input"

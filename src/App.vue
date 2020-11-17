@@ -1,7 +1,7 @@
 <template>
   <main class="app">
     <v-header></v-header>
-    <section class="section container is-widescreen main-content">
+    <section class="section container main-content">
       <router-view v-slot="{ Component }">
         <transition name="fade">
           <component :is="Component" />
@@ -35,7 +35,7 @@ export default defineComponent({
     const router = useRouter();
 
     function getAllowedRoute(isAuthenticated: boolean) {
-      const route = isAuthenticated ? paths.root.path : paths.signIn.path;
+      const route = isAuthenticated ? paths.products.path : paths.signIn.path;
 
       return route;
     }
@@ -71,5 +71,9 @@ export default defineComponent({
 .main-content {
   flex-grow: 2;
   margin-top: $header-height;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 </style>

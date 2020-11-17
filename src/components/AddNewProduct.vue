@@ -20,11 +20,27 @@
               v-model="title"
               :error="titleError"
             ></v-field>
-            <p>Description</p>
+            <v-field
+              label="Description"
+              placeholder="Product description"
+              inputType="text"
+              v-model="description"
+              :error="descriptionError"
+            ></v-field>
             <hr />
             <h6 class="subtitle is-6">
-              23
-              <span class="is-size-7">Kg</span>
+              <v-field
+                label="Amount"
+                inputType="number"
+                v-model="amount"
+                :error="amountError"
+              ></v-field>
+              <v-select
+                label="Unit"
+                v-model="unit"
+                :error="unitError"
+                :items="unitItems"
+              ></v-select>
             </h6>
           </div>
         </div>
@@ -38,11 +54,13 @@
 import { defineComponent } from 'vue';
 import { useToggle } from '@/utils';
 import VField from '@/components/Field.vue';
+import VSelect from '@/components/Select.vue';
 
 export default defineComponent({
   name: 'VAddNewProduct',
   components: {
     VField,
+    VSelect,
   },
   setup() {
     const { value: isActive, toggle: toggleActive } = useToggle(false);
@@ -58,6 +76,15 @@ export default defineComponent({
       titleError: '',
       description: '',
       descriptionError: '',
+      amount: 0,
+      amountError: '',
+      unit: '',
+      unitError: '',
+      unitItems: [
+        { value: '', label: 'Pieces' },
+        { value: 'kg', label: 'kilogram' },
+        { value: 'l', label: 'liter' },
+      ],
     };
   },
 });

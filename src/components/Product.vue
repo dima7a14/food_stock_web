@@ -1,9 +1,8 @@
 <template>
-  <button class="panel-block button is-fullwidth is-light" @click="toggleDetail">
-    <span class="panel-icon">
-      <i class="fas fa-carrot"></i>
+  <button class="panel-block button is-fullwidth is-light product" @click="toggleDetail">
+    <span class="product__title">
+      {{title}}
     </span>
-    {{title}}
     <span class="tag is-info product__amount">{{amount}}</span>
   </button>
   <div class="modal" :class="{ 'is-active': showDetail }">
@@ -69,6 +68,13 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .product {
+  justify-content: space-between;
+
+  &__title {
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
   &__amount {
     margin-left: 0.75rem;
   }
