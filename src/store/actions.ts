@@ -9,6 +9,7 @@ export enum ActionTypes {
   SIGN_UP = 'SIGN_UP',
   SIGN_OUT = 'SIGN_OUT',
   SHOW_MESSAGE = 'SHOW_MESSAGE',
+  FETCH_PRODUCTS = 'FETCH_PRODUCTS',
 }
 
 const MESSAGE_DELAY = 2000;
@@ -35,6 +36,10 @@ export interface Actions {
   [ActionTypes.SHOW_MESSAGE](
     { commit }: AugmentedActionContext,
     payload: Parameters<Mutations['SET_MESSAGE']>[1],
+  ): void;
+  [ActionTypes.FETCH_PRODUCTS](
+    { commit }: AugmentedActionContext,
+    payload: Parameters<Mutations['GET_PRODUCTS']>[1],
   ): void;
 }
 
@@ -114,9 +119,25 @@ async function signOut(context: AugmentedActionContext): Promise<void> {
   showMessage(context, { content: 'Logged out' });
 }
 
+async function fetchProducts(context: AugmentedActionContext): Promise<void> {
+  const { commit, getters } = context; // TODO: implement pagination loading
+
+  commit(MutationTypes.SET_LOADING, true);
+
+  try {
+    const products = await api.getProducts();
+    commit(MutationTypes.GET_PRODUCTS, products.data);
+  } catch (err) {
+    showMessage(context, { content: err.message, status: 'error' });
+  } finally {
+    commit(MutationTypes.SET_LOADING, false);
+  }
+}
+
 export const actions: ActionTree<State, State> & Actions = {
   [ActionTypes.SIGN_IN]: signIn,
   [ActionTypes.SIGN_UP]: signUp,
   [ActionTypes.SIGN_OUT]: signOut,
   [ActionTypes.SHOW_MESSAGE]: showMessage,
+  [ActionTypes.FETCH_PRODUCTS]: fetchProducts,
 };

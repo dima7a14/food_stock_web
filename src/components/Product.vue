@@ -3,7 +3,7 @@
     <span class="product__title">
       {{title}}
     </span>
-    <span class="tag is-info product__amount">{{amount}}</span>
+    <span class="tag is-info product__amount">{{amount}} {{unit}}</span>
   </button>
   <div class="modal" :class="{ 'is-active': showDetail }">
     <div class="modal-background"></div>

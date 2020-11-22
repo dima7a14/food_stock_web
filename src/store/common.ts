@@ -4,21 +4,23 @@ export interface User {
 }
 
 export interface Product {
+  _id: string;
   title: string;
   description: string;
   amount: number;
   unit: string;
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Operation {
+  _id: string;
   description: string;
   createdBy: string;
   products: Product[];
   intoStock: boolean;
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Message {
