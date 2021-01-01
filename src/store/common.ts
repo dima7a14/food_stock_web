@@ -13,11 +13,13 @@ export interface Product {
   updatedAt: string;
 }
 
+export type OperationProduct = Pick<Product, 'title' | 'description' | 'amount' | 'unit'>;
+
 export interface Operation {
   _id: string;
   description: string;
   createdBy: string;
-  products: Product[];
+  products: OperationProduct[];
   intoStock: boolean;
   createdAt: string;
   updatedAt: string;

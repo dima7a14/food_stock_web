@@ -4,7 +4,7 @@
       class="button is-link is-outlined"
       @click="toggleActive"
     >
-      Add new
+      Add products
     </button>
   </slot>
   <v-modal :open="isActive" :onClose="toggleActive">
@@ -12,13 +12,28 @@
       <div class="card-content">
         <div class="content">
           <v-field
-            label="Title"
-            placeholder="Product title"
+            label="Description"
+            placeholder="Description"
             inputType="text"
-            v-model="title"
-            :error="titleError"
+            v-model="description"
+            :error="descriptionError"
           ></v-field>
-          <v-field
+          <div class="field">
+            <label class="label">Products ({{products.length}})</label>
+            <div class="products-list">
+              <v-product
+                v-for="product in products"
+                :key="product.id"
+                :_id="product._id"
+                :title="product.title"
+                :description="product.description"
+                :amount="product.amount"
+                :unit="product.unit"
+              ></v-product>
+            </div>
+            <v-add-new-product :onAdd="addProduct"></v-add-new-product>
+          </div>
+          <!-- <v-field
             label="Description"
             placeholder="Product description"
             inputType="text"
@@ -39,8 +54,7 @@
               :error="unitError"
               :items="unitItems"
             ></v-select>
-          </h6>
-          <button class="button is-primary" @click="addProduct">Add</button>
+          </h6> -->
         </div>
       </div>
     </div>
@@ -49,23 +63,20 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { OperationProduct } from '@/store/common';
 import { useToggle } from '@/utils';
-import VModal from '@/components/Modal.vue';
 import VField from '@/components/Field.vue';
-import VSelect from '@/components/Select.vue';
+import VModal from '@/components/Modal.vue';
+import VProduct from '@/components/Product.vue';
+import VAddNewProduct from '@/components/AddNewProduct.vue';
 
 export default defineComponent({
-  name: 'VAddNewProduct',
+  name: 'VAddOperation',
   components: {
-    VModal,
     VField,
-    VSelect,
-  },
-  props: {
-    onAdd: {
-      type: Function,
-      required: true,
-    },
+    VModal,
+    VProduct,
+    VAddNewProduct,
   },
   setup() {
     const { value: isActive, toggle: toggleActive } = useToggle(false);
@@ -77,35 +88,24 @@ export default defineComponent({
   },
   data() {
     return {
-      title: '',
-      titleError: '',
       description: '',
       descriptionError: '',
-      amount: 0,
-      amountError: '',
-      unit: '',
-      unitError: '',
-      unitItems: [
-        { value: '', label: 'Pieces' },
-        { value: 'kg', label: 'kilogram' },
-        { value: 'l', label: 'liter' },
-      ],
+      products: [] as OperationProduct[],
     };
   },
   methods: {
-    addProduct() {
-      this.onAdd({
-        title: this.title,
-        description: this.description,
-        amount: this.amount,
-        unit: this.unit,
-      });
-
-      this.title = '';
-      this.description = '';
-      this.amount = 0;
-      this.unit = '';
+    addProduct(product: OperationProduct) {
+      this.products.push(product);
     },
   },
 });
 </script>
+
+<style lang="scss" scoped>
+@import "@/theme/main";
+
+.products-list {
+  max-height: 30vh;
+  overflow: auto;
+}
+</style>

@@ -147,11 +147,11 @@ export default defineComponent({
 @import "@/theme/values";
 
 .header {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
   height: $header-height;
+  background-color: $white;
+  box-shadow: 0 1px 1px $grey-lighter;
+  z-index: 10;
 }
 
 .current-route {

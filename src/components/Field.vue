@@ -30,7 +30,7 @@ export default defineComponent({
   name: 'VField',
   props: {
     modelValue: {
-      type: String,
+      type: String || Number,
       default: '',
     },
     label: {

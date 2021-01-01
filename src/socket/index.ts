@@ -58,6 +58,12 @@ export class API implements APIService {
 
     return result as ReturnType<APIService['getProducts']>;
   }
+
+  public async getOperations(skip?: number) { // TODO: implement pagination loading
+    const result = await this.app.service('operations').find();
+
+    return result as ReturnType<APIService['getOperations']>;
+  }
 }
 
 export const api = API.getInstance('localhost:3030');

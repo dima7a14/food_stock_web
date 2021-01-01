@@ -10,6 +10,7 @@
     </section>
     <v-message></v-message>
     <v-progress></v-progress>
+    <v-footer></v-footer>
   </main>
 </template>
 
@@ -20,6 +21,7 @@ import { useRouter } from 'vue-router';
 import { useStore } from '@/store';
 import { paths } from '@/router';
 import VHeader from '@/components/Header.vue';
+import VFooter from '@/components/Footer.vue';
 import VMessage from '@/components/Message.vue';
 import VProgress from '@/components/Progress.vue';
 
@@ -27,6 +29,7 @@ export default defineComponent({
   name: 'App',
   components: {
     VHeader,
+    VFooter,
     VMessage,
     VProgress,
   },
@@ -69,11 +72,12 @@ export default defineComponent({
 }
 
 .main-content {
-  flex-grow: 2;
-  margin-top: $header-height;
+  flex-grow: 1;
   max-width: 100%;
   display: flex;
+  padding: 1.5rem;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
+  overflow: auto;
 }
 </style>

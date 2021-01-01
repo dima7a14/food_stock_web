@@ -20,6 +20,19 @@ export interface APIProduct {
   __v: number;
 }
 
+export type APIOperationProduct = Pick<APIProduct, 'unit' | 'title' | 'description' | 'amount'>;
+
+export interface APIOperation {
+  _id: string;
+  description: string;
+  createdBy: string;
+  intoStock: boolean;
+  products: APIOperationProduct[];
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
 export interface APIListResponse<T> {
   total: number;
   limit: number;
@@ -36,4 +49,5 @@ export interface APIService {
   register(email: string, password: string): Promise<APIUser>;
   logout(): Promise<void>;
   getProducts(skip?: number): Promise<APIListResponse<APIProduct>>;
+  getOperations(skip?: number): Promise<APIListResponse<APIOperation>>;
 }

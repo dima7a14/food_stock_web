@@ -1,6 +1,6 @@
 import { MutationTree } from 'vuex';
 import { State } from './state';
-import { mergeProducts } from './utils';
+import { mergeItems } from './utils';
 import { Product } from './common';
 
 export enum MutationTypes {
@@ -8,6 +8,7 @@ export enum MutationTypes {
   SET_MESSAGE = 'SET_MESSAGE',
   SET_LOADING = 'SET_LOADING',
   GET_PRODUCTS = 'GET_PRODUCTS',
+  GET_OPERATIONS = 'GET_OPERATIONS',
 }
 
 export type Mutations<S = State> = {
@@ -15,6 +16,7 @@ export type Mutations<S = State> = {
   [MutationTypes.SET_MESSAGE](state: S, payload: State['message']): void;
   [MutationTypes.SET_LOADING](state: S, payload: State['loading']): void;
   [MutationTypes.GET_PRODUCTS](state: S, payload: State['products']): void;
+  [MutationTypes.GET_OPERATIONS](state: S, payload: State['operations']): void;
 }
 
 export const mutations: MutationTree<State> & Mutations<State> = {
@@ -28,6 +30,9 @@ export const mutations: MutationTree<State> & Mutations<State> = {
     state.loading = payload;
   },
   [MutationTypes.GET_PRODUCTS](state, payload) {
-    state.products = mergeProducts(state.products, payload);
+    state.products = mergeItems(state.products, payload);
+  },
+  [MutationTypes.GET_OPERATIONS](state, payload) {
+    state.operations = mergeItems(state.operations, payload);
   },
 };

@@ -10,6 +10,7 @@ export enum ActionTypes {
   SIGN_OUT = 'SIGN_OUT',
   SHOW_MESSAGE = 'SHOW_MESSAGE',
   FETCH_PRODUCTS = 'FETCH_PRODUCTS',
+  FETCH_OPERATIONS = 'FETCH_OPERATIONS',
 }
 
 const MESSAGE_DELAY = 2000;
@@ -41,6 +42,10 @@ export interface Actions {
     { commit }: AugmentedActionContext,
     payload: Parameters<Mutations['GET_PRODUCTS']>[1],
   ): void;
+  [ActionTypes.FETCH_OPERATIONS](
+    { commit }: AugmentedActionContext,
+    payload: Parameters<Mutations['GET_OPERATIONS']>[1],
+  ): void;
 }
 
 function showMessage(
@@ -56,6 +61,10 @@ function showMessage(
 
 function handleErrorFromAPI<E extends APIError>(err: E, context: AugmentedActionContext) {
   if (err.code && err.code >= 400) {
+    if (err.code === 401) {
+      context.commit(MutationTypes.SET_USER, { email: '', admin: false });
+    }
+
     context.commit(MutationTypes.SET_LOADING, false);
     showMessage(context, {
       content: err.message,
@@ -128,7 +137,22 @@ async function fetchProducts(context: AugmentedActionContext): Promise<void> {
     const products = await api.getProducts();
     commit(MutationTypes.GET_PRODUCTS, products.data);
   } catch (err) {
-    showMessage(context, { content: err.message, status: 'error' });
+    handleErrorFromAPI(err, context);
+  } finally {
+    commit(MutationTypes.SET_LOADING, false);
+  }
+}
+
+async function fetchOperations(context: AugmentedActionContext): Promise<void> {
+  const { commit, getters } = context; // TODO: implement pagination loading
+
+  commit(MutationTypes.SET_LOADING, true);
+
+  try {
+    const operations = await api.getOperations();
+    commit(MutationTypes.GET_OPERATIONS, operations.data);
+  } catch (err) {
+    handleErrorFromAPI(err, context);
   } finally {
     commit(MutationTypes.SET_LOADING, false);
   }
@@ -140,4 +164,5 @@ export const actions: ActionTree<State, State> & Actions = {
   [ActionTypes.SIGN_OUT]: signOut,
   [ActionTypes.SHOW_MESSAGE]: showMessage,
   [ActionTypes.FETCH_PRODUCTS]: fetchProducts,
+  [ActionTypes.FETCH_OPERATIONS]: fetchOperations,
 };

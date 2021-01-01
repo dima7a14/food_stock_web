@@ -1,22 +1,25 @@
-import { Product } from './common';
+type Item = {
+  _id: string;
+  updatedAt?: string;
+};
 
-export function mergeProducts(currentProducts: Product[], newProducts: Product[]): Product[] {
-  const products = [...currentProducts];
+export function mergeItems<T extends Item>(current: T[], next: T[]): T[] {
+  const result = [...current];
 
-  for (const product of newProducts) {
-    const index = products.findIndex(p => p._id === product._id);
+  next.forEach((item) => {
+    const index = result.findIndex((i) => i._id === item._id);
 
     if (index === -1) {
-      products.push(product);
+      result.push(item);
     } else {
-      const productTimestamp = new Date(product.updatedAt || '');
-      const currentProductTimestamp = new Date(products[index].updatedAt || '');
+      const currentTimestamp = new Date(result[index].updatedAt || '');
+      const nextTimestamp = new Date(item.updatedAt || '');
 
-      if (productTimestamp > currentProductTimestamp) {
-        products.splice(index, 1, product);
+      if (nextTimestamp > currentTimestamp) {
+        result.splice(index, 1, item);
       }
     }
-  }
+  });
 
-  return products;
+  return result;
 }
